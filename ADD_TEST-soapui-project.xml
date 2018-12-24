@@ -2083,7 +2083,8 @@ def myTestCase = context.testCase //myTestCase contains the test case
  
 def counter,next,previous,size //Variables used to handle the loop and to move inside the file
 
-size= 500
+srows = sql.firstRow("select count(1) CantidadTotal from ##temp_OrdenTrabajo")
+size= srows.CantidadTotal
  
 propTestStep = myTestCase.getTestStepByName("Property - Looper") // get the Property TestStep object
 
@@ -2143,7 +2144,7 @@ rowDetails.each
        'uniq:strPlan'(item.strPlan)
        'uniq:strTipoCarro'(item.strTipoCarro)
        'uniq:strFlagPremio'(item.strFlagPremio)
-       'uniq:strCodeUNSPSC'(item.strCodeUNSPSC)
+       'uniq:strCodigoUNSPSC'(item.STRCODIGOUNSPSC)
 
  
 }}
@@ -2255,8 +2256,12 @@ propTestStep.setPropertyValue("detailOrden", writer.toString())
 
 
  def rowDespacho = sql.firstRow("select * from ##temp_Despacho where strNumeroOrdenCompra ='" + row.STRNUMORDEN.toString()+"'")
- 
-propDespachoStep.setPropertyValue("strCodigoUnidadNegocio", rowDespacho.STRCODIGOUNIDADNEGOCIO)
+
+log.info(row.STRNUMORDEN)
+
+ if(rowDespacho!= null)
+ {
+ 	propDespachoStep.setPropertyValue("strCodigoUnidadNegocio", rowDespacho.STRCODIGOUNIDADNEGOCIO)
 propDespachoStep.setPropertyValue("strNumeroOrdenCompra", rowDespacho.STRNUMEROORDENCOMPRA)
 propDespachoStep.setPropertyValue("strNumeroPallet", rowDespacho.STRNUMEROPALLET)
 propDespachoStep.setPropertyValue("strUsuario", rowDespacho.STRUSUARIO)
@@ -2294,10 +2299,14 @@ propDespachoStep.setPropertyValue("strCrossDock4", rowDespacho.STRCROSSDOCK4)
 propDespachoStep.setPropertyValue("strCrossDock5", rowDespacho.STRCROSSDOCK5)
 propDespachoStep.setPropertyValue("strCodigoZona", rowDespacho.STRCODIGOZONA)
 propDespachoStep.setPropertyValue("strZonaRepartoDescripcion", rowDespacho.STRZONAREPARTODESCRIPCION)
+ 	}
+
 
 def rowPicking = sql.firstRow("select * from ##temp_PickingCabecera where strNumeroOrdenCompra ='" + row.STRNUMORDEN.toString()+ "'")
 
-propPickingStep.setPropertyValue("strCodigoUnidadNegocio", rowPicking.STRCODIGOUNIDADNEGOCIO)
+if(rowPicking!= null)
+{
+	propPickingStep.setPropertyValue("strCodigoUnidadNegocio", rowPicking.STRCODIGOUNIDADNEGOCIO)
 propPickingStep.setPropertyValue("strNumeroOrdenCompra", rowPicking.STRNUMEROORDENCOMPRA)
 propPickingStep.setPropertyValue("datFechaEnvio", rowPicking.DATFECHAENVIO.toString())
 propPickingStep.setPropertyValue("intNumeroCajasOrden", rowPicking.INTNUMEROCAJASORDEN.toString())
@@ -2327,6 +2336,8 @@ rowPickingDetails.each
 propPickingStep.setPropertyValue("detailPicking", writerPicking.toString())	   
         
  
+
+	}
 
 propTestStep.setPropertyValue("Count", next.toString()) //increase Count value
  
@@ -2363,441 +2374,59 @@ else
  
 propTestStep.setPropertyValue("StopLoop", "F")
  
-}</script></con:config></con:testStep><con:testStep type="properties" name="Property - Looper" id="336f0d51-db87-4ee5-9581-3ad3a0e9915a"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>Total</con:name><con:value>1000</con:value></con:property><con:property><con:name>Count</con:name><con:value>500</con:value></con:property><con:property><con:name>Next</con:name><con:value>501</con:value></con:property><con:property><con:name>StopLoop</con:name><con:value>F</con:value></con:property><con:property><con:name>strNumOrden</con:name><con:value>10063611600</con:value></con:property><con:property><con:name>strCodigoDirectora</con:name><con:value>1112835798</con:value></con:property><con:property><con:name>strCodigoConsultora</con:name><con:value>1121589198</con:value></con:property><con:property><con:name>strApellidopaternoConsultora</con:name><con:value>COJAL</con:value></con:property><con:property><con:name>strApellidomaternoConsultora</con:name><con:value>ORTIZ</con:value></con:property><con:property><con:name>strNombreConsultora</con:name><con:value>INGRID JOSELYN</con:value></con:property><con:property><con:name>strTipOrden</con:name><con:value>NOR</con:value></con:property><con:property><con:name>strDescripciontipoOrden</con:name><con:value>Normal Order</con:value></con:property><con:property><con:name>strNombrePais</con:name><con:value>PE</con:value></con:property><con:property><con:name>intAnho</con:name><con:value>2018</con:value></con:property><con:property><con:name>intCampanha</con:name><con:value>12</con:value></con:property><con:property><con:name>intSemana</con:name><con:value>4</con:value></con:property><con:property><con:name>intSemanaAnual</con:name><con:value>48</con:value></con:property><con:property><con:name>datFechaIngreso</con:name><con:value>2018-12-01T20:00:59.313</con:value></con:property><con:property><con:name>strUsuario</con:name><con:value>1121589198</con:value></con:property><con:property><con:name>strDireccionEnvio</con:name><con:value>CA ANGELICA PALMA NR 259 E II PISO 2 UR CARLOS CUETO F </con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel1Consultora</con:name><con:value>LIMA-LIMA</con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel2Consultora</con:name><con:value>LOS OLIVOS</con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel3Consultora</con:name><con:value>URB. FERNANDO CUETO FERNANDINI Et. 1</con:value></con:property><con:property><con:name>strCodigoPostal</con:name><con:value/></con:property><con:property><con:name>strCodigoZona</con:name><con:value>51150117095</con:value></con:property><con:property><con:name>decMontoventapublicaTotal</con:name><con:value>2468.900000</con:value></con:property><con:property><con:name>decMontoventaNeta</con:name><con:value>1359.980000</con:value></con:property><con:property><con:name>decMontoventanetaTotal</con:name><con:value>1371.000000</con:value></con:property><con:property><con:name>decMontoImpuesto</con:name><con:value>244.800000</con:value></con:property><con:property><con:name>decMontoFlete</con:name><con:value>13.000000</con:value></con:property><con:property><con:name>decMontototalDescuento</con:name><con:value>864.120000</con:value></con:property><con:property><con:name>decMontoTotalOrden</con:name><con:value>1649.900000</con:value></con:property><con:property><con:name>decEscalaDescuento</con:name><con:value>35.000000</con:value></con:property><con:property><con:name>cadCodigoAlmacen</con:name><con:value>PRA001</con:value></con:property><con:property><con:name>intIndicadorprimerPedido</con:name><con:value>0</con:value></con:property><con:property><con:name>decGananciaIntegral</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decPorcentajeImpuestoAdicional</con:name><con:value>2.000000</con:value></con:property><con:property><con:name>decMontoImpuestosEspeciales</con:name><con:value>32.120000</con:value></con:property><con:property><con:name>decMontoImpuestoFlete</con:name><con:value>1.980000</con:value></con:property><con:property><con:name>decPorcentajeImpuesto</con:name><con:value>18.000000</con:value></con:property><con:property><con:name>strTipoPersona</con:name><con:value>1</con:value></con:property><con:property><con:name>strCodigoTributario</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strRazonSocial</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDireccionrazonSocial</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strCorreoConsultora</con:name><con:value>requerimientosunique@canvia.com</con:value></con:property><con:property><con:name>strTelefonoConsultora</con:name><con:value>987127544</con:value></con:property><con:property><con:name>strDocumentoidentidadConsultora</con:name><con:value>70503391</con:value></con:property><con:property><con:name>strNombreDirectora</con:name><con:value>Rosa Claribel Ortiz Ayala</con:value></con:property><con:property><con:name>strDireccionDirectora</con:name><con:value>AV ANGELICA PALMA NR 259 MZ K1 LT 26 E 2 UR CUETO FERNANDINI (CASA REJA NEGRA 4 PISOS)</con:value></con:property><con:property><con:name>strTelefonoDirectora</con:name><con:value>997442746</con:value></con:property><con:property><con:name>decMontoAplicadoEstrella</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>strNumPedRef</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strTipDocRef</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNumSerRef</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNumDocRef</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strMtvOrdCompra</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDescMtvSalAdministrativa</con:name><con:value/></con:property><con:property><con:name>datfecEmiOrigen</con:name><con:value>null</con:value></con:property><con:property><con:name>strTipoDocumentoIdentidad</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDireccionDomicilio</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio1</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio2</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio3</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>detailOrden</con:name><con:value><![CDATA[<uniq:lstDetalleOrden>
+}</script></con:config></con:testStep><con:testStep type="properties" name="Property - Looper" id="336f0d51-db87-4ee5-9581-3ad3a0e9915a"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>Total</con:name><con:value>40</con:value></con:property><con:property><con:name>Count</con:name><con:value>0</con:value></con:property><con:property><con:name>Next</con:name><con:value>1</con:value></con:property><con:property><con:name>StopLoop</con:name><con:value>T</con:value></con:property><con:property><con:name>strNumOrden</con:name><con:value>10063613013</con:value></con:property><con:property><con:name>strCodigoDirectora</con:name><con:value>119560</con:value></con:property><con:property><con:name>strCodigoConsultora</con:name><con:value>1121940705</con:value></con:property><con:property><con:name>strApellidopaternoConsultora</con:name><con:value>ESPINOZA</con:value></con:property><con:property><con:name>strApellidomaternoConsultora</con:name><con:value>INOCENTE</con:value></con:property><con:property><con:name>strNombreConsultora</con:name><con:value>CARLAGRETA</con:value></con:property><con:property><con:name>strTipOrden</con:name><con:value>PRE</con:value></con:property><con:property><con:name>strDescripciontipoOrden</con:name><con:value>Prize Order</con:value></con:property><con:property><con:name>strNombrePais</con:name><con:value>PE</con:value></con:property><con:property><con:name>intAnho</con:name><con:value>2018</con:value></con:property><con:property><con:name>intCampanha</con:name><con:value>12</con:value></con:property><con:property><con:name>intSemana</con:name><con:value>4</con:value></con:property><con:property><con:name>intSemanaAnual</con:name><con:value>48</con:value></con:property><con:property><con:name>datFechaIngreso</con:name><con:value>2018-12-01T21:50:10.127</con:value></con:property><con:property><con:name>strUsuario</con:name><con:value>GP\PERPRD_rte</con:value></con:property><con:property><con:name>strDireccionEnvio</con:name><con:value>JR PAREJA PAZ SOLDAN MZ Z2 LT 20 ET 7 UR PANDO (UNIVERSITARIA CON AV LIMA)</con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel1Consultora</con:name><con:value>LIMA-LIMA</con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel2Consultora</con:name><con:value>SAN MIGUEL</con:value></con:property><con:property><con:name>strUbicacionGeograficaNivel3Consultora</con:name><con:value>FUNDO. PANDO</con:value></con:property><con:property><con:name>strCodigoPostal</con:name><con:value/></con:property><con:property><con:name>strCodigoZona</con:name><con:value>51150136008</con:value></con:property><con:property><con:name>decMontoventapublicaTotal</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoventaNeta</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoventanetaTotal</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoImpuesto</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoFlete</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontototalDescuento</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoTotalOrden</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decEscalaDescuento</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>cadCodigoAlmacen</con:name><con:value>PRA001</con:value></con:property><con:property><con:name>intIndicadorprimerPedido</con:name><con:value>0</con:value></con:property><con:property><con:name>decGananciaIntegral</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decPorcentajeImpuestoAdicional</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoImpuestosEspeciales</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decMontoImpuestoFlete</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>decPorcentajeImpuesto</con:name><con:value>18.000000</con:value></con:property><con:property><con:name>strTipoPersona</con:name><con:value>1</con:value></con:property><con:property><con:name>strCodigoTributario</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strRazonSocial</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDireccionrazonSocial</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strCorreoConsultora</con:name><con:value>CARLAGRETA18@HOTMAIL.COM</con:value></con:property><con:property><con:name>strTelefonoConsultora</con:name><con:value>515812501</con:value></con:property><con:property><con:name>strDocumentoidentidadConsultora</con:name><con:value>75728967</con:value></con:property><con:property><con:name>strNombreDirectora</con:name><con:value>Ursula Dajhana Paredes Quintanilla</con:value></con:property><con:property><con:name>strDireccionDirectora</con:name><con:value>JR. ANTONIO CABO NRO. 726 URB. EL TREBOL IV ETAPA (ESPALDA DE SERPOST TOMAS VALLE) </con:value></con:property><con:property><con:name>strTelefonoDirectora</con:name><con:value>966934748</con:value></con:property><con:property><con:name>decMontoAplicadoEstrella</con:name><con:value>0.000000</con:value></con:property><con:property><con:name>strNumPedRef</con:name><con:value>63268275</con:value></con:property><con:property><con:name>strTipDocRef</con:name><con:value>002</con:value></con:property><con:property><con:name>strNumSerRef</con:name><con:value>B176</con:value></con:property><con:property><con:name>strNumDocRef</con:name><con:value>01861230</con:value></con:property><con:property><con:name>strMtvOrdCompra</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDescMtvSalAdministrativa</con:name><con:value/></con:property><con:property><con:name>datfecEmiOrigen</con:name><con:value>2018-11-03T00:00:00</con:value></con:property><con:property><con:name>strTipoDocumentoIdentidad</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strDireccionDomicilio</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio1</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio2</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>strNivelGeograficoDomicilio3</con:name><con:value xsi:nil="true"/></con:property><con:property><con:name>detailOrden</con:name><con:value><![CDATA[<uniq:lstDetalleOrden>
   <uniq:DetalleOrden>
     <uniq:intNumeroSecuencial>1</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>20012169</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>TE DESEO UN VIAJE SOÑADO COLG</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>2025</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>10</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>29.900000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>29.900000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>164.700000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>29.650000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>3.890000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>164.710000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>00</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>104.650000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>2025</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>TE DESEO UN VIAJE SOÑADO</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>299.000000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>2</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>22371680</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>BOLSA COLECCION DESEO 2018</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>62401</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>41</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>NC</uniq:strTipoPrecioProducto>
+    <uniq:intNumeroOrden>10063613013</uniq:intNumeroOrden>
+    <uniq:strCodigoProducto>12465720</uniq:strCodigoProducto>
+    <uniq:strDescripcionProducto>SET DE VAJILLA 22 PZAS N5 PLUS</uniq:strDescripcionProducto>
+    <uniq:strCodigoComercial>55639</uniq:strCodigoComercial>
+    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
+    <uniq:strTipoPrecioProducto>PRE</uniq:strTipoPrecioProducto>
     <uniq:decPrecioUnitarioProducto>0.000000</uniq:decPrecioUnitarioProducto>
     <uniq:decPrecioReferencial>0.000000</uniq:decPrecioReferencial>
     <uniq:decMontoTotalProductoNeto>0.000000</uniq:decMontoTotalProductoNeto>
     <uniq:decMontoTotalImpuestoProducto>0.000000</uniq:decMontoTotalImpuestoProducto>
     <uniq:decMontoTotalImpuestoAdicionalProducto>0.000000</uniq:decMontoTotalImpuestoAdicionalProducto>
     <uniq:decMontoComisionableOfertaProducto>0.000000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>27</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio>50</uniq:strOrigenAnuncio>
+    <uniq:strClaseOferta />
+    <uniq:strOrigenAnuncio>51</uniq:strOrigenAnuncio>
     <uniq:decMontoDescuentoProducto>0.000000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>10099994</uniq:strResponsable>
+    <uniq:strResponsable>55639</uniq:strResponsable>
     <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>BOLSA COLECCIÓN DESEO 2018</uniq:strDescripcionComercial>
+    <uniq:strCodigoIncentivo>53</uniq:strCodigoIncentivo>
+    <uniq:strDescripcionComercial>SET DE VAJILLA 22 PZAS N5 PLUS</uniq:strDescripcionComercial>
     <uniq:decEscalaDescuento>0.000000</uniq:decEscalaDescuento>
     <uniq:decMontoCalificacionProducto>0.000000</uniq:decMontoCalificacionProducto>
     <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>Gratis por cada Colo</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>3</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>20012168</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>TE DESEO UN AMOR PAR SIEM COLG</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>2024</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>11</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>29.900000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>29.900000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>181.170000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>32.610000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>4.280000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>181.180000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>00</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>115.120000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>2024</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>TE DESEO UN AMOR PARA SIEMPRE</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>328.900000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>4</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>20012167</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>TE DESEO SUERTE Y BUE VIB COLG</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>2023</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>20</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>29.900000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>29.900000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>329.410000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>59.290000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>7.780000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>329.420000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>00</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>209.300000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>2023</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>TE DESEO SUERTE Y BUENAS VIBRAS</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>598.000000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>5</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>25031614</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>ARETES NATURA CRISTAL             J15889</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>31614</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>40</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>OB</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>25.000000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>45.000000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>550.850000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>99.150000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>13.000000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>550.940000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>06</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio>50</uniq:strOrigenAnuncio>
-    <uniq:decMontoDescuentoProducto>350.000000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>31614</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>ARETES NATURA CRISTAL             J15889</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>1000.000000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
     <uniq:strPlan></uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
+    <uniq:strTipoCarro>PRE</uniq:strTipoCarro>
     <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>6</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004651</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>REVITALIST HIDRATANTE</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7179</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>32.670000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>32.670000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>18.000000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.240000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.430000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>17.990000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>11.430000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7179</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET REVITALIST</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>32.670000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>7</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004654</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>REVITALIST LIMPIADOR</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7179</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>33.660000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>33.660000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>18.540000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.340000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.440000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>18.540000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>11.780000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7179</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET REVITALIST</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>33.660000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>8</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004670</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>REVITALIST TONICO</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7179</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>32.670000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>32.670000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>17.990000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.240000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.420000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>18.000000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>11.440000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7179</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET REVITALIST</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>32.670000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>9</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004652</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>ELIXIR DE VIDA HIDRATANTE</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7178</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>35.970000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>35.970000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>19.810000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.570000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.470000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>19.810000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>12.590000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7178</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET ELIXIR</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>35.970000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>10</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004655</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>ELIXIR DE VIDA LIMPIADOR</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7178</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>37.060000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>37.060000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>20.410000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.680000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.480000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>20.410000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>12.970000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7178</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET ELIXIR</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>37.060000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>11</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>10004671</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>ELIXIR DE VIDA GEL TONICO</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>7178</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>35.970000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>35.970000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>19.820000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.560000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.470000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>19.820000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>21</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>12.590000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>7178</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>SET ELIXIR</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>35.970000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
-  </uniq:DetalleOrden>
-  <uniq:DetalleOrden>
-    <uniq:intNumeroSecuencial>12</uniq:intNumeroSecuencial>
-    <uniq:intNumeroOrden>10063611600</uniq:intNumeroOrden>
-    <uniq:strCodigoProducto>20011611</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>CRECE EXTREME RIMEL NEGRO</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>4681</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>O</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>35.000000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>35.000000</uniq:decPrecioReferencial>
-    <uniq:decMontoTotalProductoNeto>19.280000</uniq:decMontoTotalProductoNeto>
-    <uniq:decMontoTotalImpuestoProducto>3.470000</uniq:decMontoTotalImpuestoProducto>
-    <uniq:decMontoTotalImpuestoAdicionalProducto>0.460000</uniq:decMontoTotalImpuestoAdicionalProducto>
-    <uniq:decMontoComisionableOfertaProducto>19.280000</uniq:decMontoComisionableOfertaProducto>
-    <uniq:strClaseOferta>12</uniq:strClaseOferta>
-    <uniq:strOrigenAnuncio />
-    <uniq:decMontoDescuentoProducto>12.250000</uniq:decMontoDescuentoProducto>
-    <uniq:strResponsable>4681</uniq:strResponsable>
-    <uniq:strCodigoAlmacen>PRA001</uniq:strCodigoAlmacen>
-    <uniq:strCodigoIncentivo />
-    <uniq:strDescripcionComercial>CRECE EXTREME NEGRO</uniq:strDescripcionComercial>
-    <uniq:decEscalaDescuento>35.000000</uniq:decEscalaDescuento>
-    <uniq:decMontoCalificacionProducto>35.000000</uniq:decMontoCalificacionProducto>
-    <uniq:decMontoDescuentoEstrella>0.000000</uniq:decMontoDescuentoEstrella>
-    <uniq:strPlan>.</uniq:strPlan>
-    <uniq:strTipoCarro>NOR</uniq:strTipoCarro>
-    <uniq:strFlagPremio>0</uniq:strFlagPremio>
-    <uniq:strCodeUNSPSC />
+    <uniq:strCodigoUNSPSC>53131605</uniq:strCodigoUNSPSC>
   </uniq:DetalleOrden>
 </uniq:lstDetalleOrden>]]></con:value></con:property><con:property><con:name>detailIncentivo</con:name><con:value><![CDATA[<uniq:lstDetalleIncentivo>
   <uniq:DetalleIncentivo>
     <uniq:intNumeroSecuencial>1</uniq:intNumeroSecuencial>
-    <uniq:strPlanID>477</uniq:strPlanID>
-    <uniq:strNombrePlan>GANAMASC122018</uniq:strNombrePlan>
-    <uniq:strDescripcionPlan>Ganamás C12 2018</uniq:strDescripcionPlan>
-    <uniq:strNivelPlan>4</uniq:strNivelPlan>
+    <uniq:strPlanID>413</uniq:strPlanID>
+    <uniq:strNombrePlan>GANAMASC10C112018</uniq:strNombrePlan>
+    <uniq:strDescripcionPlan>Ganamás C10-C11 2018</uniq:strDescripcionPlan>
+    <uniq:strNivelPlan>5P</uniq:strNivelPlan>
     <uniq:strCodigoIncentivo>53</uniq:strCodigoIncentivo>
     <uniq:strCodigoOrigen>51</uniq:strCodigoOrigen>
-    <uniq:decMontoInicialincentivo>3000.000000</uniq:decMontoInicialincentivo>
-    <uniq:decMontoFinalIncentivo>7000.000000</uniq:decMontoFinalIncentivo>
-    <uniq:datFechaInicioPlan>2018-12-02T00:00:00</uniq:datFechaInicioPlan>
-    <uniq:datFechaFinPlan>2018-12-30T00:00:00</uniq:datFechaFinPlan>
-    <uniq:strCodigoProducto>12464595</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>CARTERA PARIS</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>55615</uniq:strCodigoComercial>
+    <uniq:decMontoInicialincentivo>16000.000000</uniq:decMontoInicialincentivo>
+    <uniq:decMontoFinalIncentivo>999999.990000</uniq:decMontoFinalIncentivo>
+    <uniq:datFechaInicioPlan>2018-11-04T00:00:00</uniq:datFechaInicioPlan>
+    <uniq:datFechaFinPlan>2018-12-02T00:00:00</uniq:datFechaFinPlan>
+    <uniq:strCodigoProducto>12465720</uniq:strCodigoProducto>
+    <uniq:strDescripcionProducto>SET DE VAJILLA 22 PZAS N5 PLUS</uniq:strDescripcionProducto>
+    <uniq:strCodigoComercial>55639</uniq:strCodigoComercial>
     <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
     <uniq:strTipoPrecioProducto>PRE</uniq:strTipoPrecioProducto>
     <uniq:decPrecioUnitarioProducto>0.000000</uniq:decPrecioUnitarioProducto>
     <uniq:decPrecioReferencial>0.000000</uniq:decPrecioReferencial>
-    <uniq:strMarcaPedido>Qualified </uniq:strMarcaPedido>
+    <uniq:strMarcaPedido>In Order  </uniq:strMarcaPedido>
   </uniq:DetalleIncentivo>
-  <uniq:DetalleIncentivo>
-    <uniq:intNumeroSecuencial>2</uniq:intNumeroSecuencial>
-    <uniq:strPlanID>477</uniq:strPlanID>
-    <uniq:strNombrePlan>GANAMASC122018</uniq:strNombrePlan>
-    <uniq:strDescripcionPlan>Ganamás C12 2018</uniq:strDescripcionPlan>
-    <uniq:strNivelPlan>4</uniq:strNivelPlan>
-    <uniq:strCodigoIncentivo>53</uniq:strCodigoIncentivo>
-    <uniq:strCodigoOrigen>51</uniq:strCodigoOrigen>
-    <uniq:decMontoInicialincentivo>3000.000000</uniq:decMontoInicialincentivo>
-    <uniq:decMontoFinalIncentivo>7000.000000</uniq:decMontoFinalIncentivo>
-    <uniq:datFechaInicioPlan>2018-12-02T00:00:00</uniq:datFechaInicioPlan>
-    <uniq:datFechaFinPlan>2018-12-30T00:00:00</uniq:datFechaFinPlan>
-    <uniq:strCodigoProducto>12464590</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>VENTILADOR DE TORRE (N2 C12)</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>55580</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>PRE</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>0.000000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>0.000000</uniq:decPrecioReferencial>
-    <uniq:strMarcaPedido>Qualified </uniq:strMarcaPedido>
-  </uniq:DetalleIncentivo>
-  <uniq:DetalleIncentivo>
-    <uniq:intNumeroSecuencial>3</uniq:intNumeroSecuencial>
-    <uniq:strPlanID>477</uniq:strPlanID>
-    <uniq:strNombrePlan>GANAMASC122018</uniq:strNombrePlan>
-    <uniq:strDescripcionPlan>Ganamás C12 2018</uniq:strDescripcionPlan>
-    <uniq:strNivelPlan>4</uniq:strNivelPlan>
-    <uniq:strCodigoIncentivo>53</uniq:strCodigoIncentivo>
-    <uniq:strCodigoOrigen>51</uniq:strCodigoOrigen>
-    <uniq:decMontoInicialincentivo>3000.000000</uniq:decMontoInicialincentivo>
-    <uniq:decMontoFinalIncentivo>7000.000000</uniq:decMontoFinalIncentivo>
-    <uniq:datFechaInicioPlan>2018-12-02T00:00:00</uniq:datFechaInicioPlan>
-    <uniq:datFechaFinPlan>2018-12-30T00:00:00</uniq:datFechaFinPlan>
-    <uniq:strCodigoProducto>12464592</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>MESA PLEGABLE (N3 C12)</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>55582</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>PRE</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>0.000000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>0.000000</uniq:decPrecioReferencial>
-    <uniq:strMarcaPedido>Qualified </uniq:strMarcaPedido>
-  </uniq:DetalleIncentivo>
-  <uniq:DetalleIncentivo>
-    <uniq:intNumeroSecuencial>4</uniq:intNumeroSecuencial>
-    <uniq:strPlanID>477</uniq:strPlanID>
-    <uniq:strNombrePlan>GANAMASC122018</uniq:strNombrePlan>
-    <uniq:strDescripcionPlan>Ganamás C12 2018</uniq:strDescripcionPlan>
-    <uniq:strNivelPlan>4</uniq:strNivelPlan>
-    <uniq:strCodigoIncentivo>53</uniq:strCodigoIncentivo>
-    <uniq:strCodigoOrigen>51</uniq:strCodigoOrigen>
-    <uniq:decMontoInicialincentivo>3000.000000</uniq:decMontoInicialincentivo>
-    <uniq:decMontoFinalIncentivo>7000.000000</uniq:decMontoFinalIncentivo>
-    <uniq:datFechaInicioPlan>2018-12-02T00:00:00</uniq:datFechaInicioPlan>
-    <uniq:datFechaFinPlan>2018-12-30T00:00:00</uniq:datFechaFinPlan>
-    <uniq:strCodigoProducto>12464593</uniq:strCodigoProducto>
-    <uniq:strDescripcionProducto>PARLANTE KARAOKE + MICROFONO ( N4 C12)</uniq:strDescripcionProducto>
-    <uniq:strCodigoComercial>55583</uniq:strCodigoComercial>
-    <uniq:intCantidadProducto>1</uniq:intCantidadProducto>
-    <uniq:strTipoPrecioProducto>PRE</uniq:strTipoPrecioProducto>
-    <uniq:decPrecioUnitarioProducto>0.000000</uniq:decPrecioUnitarioProducto>
-    <uniq:decPrecioReferencial>0.000000</uniq:decPrecioReferencial>
-    <uniq:strMarcaPedido>Qualified </uniq:strMarcaPedido>
-  </uniq:DetalleIncentivo>
-</uniq:lstDetalleIncentivo>]]></con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarOrden" id="e198140d-fe1d-4a41-88a5-0cf3066dcbce"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpBinding_IServicioRegistroJ6</con:interface><con:operation>registrarOrdenCompra</con:operation><con:request name="RegistrarOrden" id="707febe3-7d8a-4b22-a6f8-81b60ed3c215"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.100.120.139/PE/svrADDJ6_TAG/ServicioRegistroJ6.svc/ServicioRegistroJ6</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroJ6">
+</uniq:lstDetalleIncentivo>]]></con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarOrden" id="e198140d-fe1d-4a41-88a5-0cf3066dcbce"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpBinding_IServicioRegistroJ6</con:interface><con:operation>registrarOrdenCompra</con:operation><con:request name="RegistrarOrden" id="707febe3-7d8a-4b22-a6f8-81b60ed3c215"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://uat-web-sfc-per.gp.unique-yanbal.com:444/srvADDJ6/ServicioRegistroJ6.svc/ServicioRegistroJ6</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroJ6">
    <soapenv:Header/>
    <soapenv:Body>
       <tem:registrarOrdenCompra>
@@ -2933,7 +2562,7 @@ propTestStep.setPropertyValue("StopLoop", "F")
          </tem:lstOrdenCompra>
       </tem:registrarOrdenCompra>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="810edc62-58ed-4b26-88b1-2d0273cb5b13"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="properties" name="Properties - Despacho" id="48e13e72-4d84-4c43-be26-b3619c93d1fa"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>strCodigoUnidadNegocio</con:name><con:value>PE</con:value></con:property><con:property><con:name>strNumeroOrdenCompra</con:name><con:value>10063611600</con:value></con:property><con:property><con:name>strNumeroPallet</con:name><con:value>PE00179765</con:value></con:property><con:property><con:name>strUsuario</con:name><con:value>MAGNAM1</con:value></con:property><con:property><con:name>strNumeroDespacho</con:name><con:value>400283483</con:value></con:property><con:property><con:name>datFechaInicioTraslado</con:name><con:value>2018-12-02T00:00:00</con:value></con:property><con:property><con:name>strRazonSocialTransportista1</con:name><con:value>DEMALE S.R.L.</con:value></con:property><con:property><con:name>strDireccionTransportista1</con:name><con:value>CAL. LAS AVESTRUCES NRO. 282 URB. S</con:value></con:property><con:property><con:name>strRucTransportista1</con:name><con:value>20514398055</con:value></con:property><con:property><con:name>strPuntoPartida1</con:name><con:value>Av. Industrial S/N Par. Ind. Las Praderas PE</con:value></con:property><con:property><con:name>strPuntoLlegada1</con:name><con:value>Mz B1 Lote 18  URB. GRIMANESA - CALLAO PE</con:value></con:property><con:property><con:name>strRazonSocialTransportista2</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista2</con:name><con:value/></con:property><con:property><con:name>strRucTransportista2</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida2</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada2</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista3</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista3</con:name><con:value/></con:property><con:property><con:name>strRucTransportista3</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida3</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada3</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista4</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista4</con:name><con:value/></con:property><con:property><con:name>strRucTransportista4</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida4</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada4</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista5</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista5</con:name><con:value/></con:property><con:property><con:name>strRucTransportista5</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida5</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada5</con:name><con:value/></con:property><con:property><con:name>strCrossDock1</con:name><con:value>LIMA NORTE CENTRO VC</con:value></con:property><con:property><con:name>strCrossDock2</con:name><con:value/></con:property><con:property><con:name>strCrossDock3</con:name><con:value/></con:property><con:property><con:name>strCrossDock4</con:name><con:value/></con:property><con:property><con:name>strCrossDock5</con:name><con:value/></con:property><con:property><con:name>strCodigoZona</con:name><con:value>PE-R-Z725</con:value></con:property><con:property><con:name>strZonaRepartoDescripcion</con:name><con:value>LOS OLIVOS</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarDespacho" id="1f250d0b-3dbb-4420-91ce-738cc8859cc3"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpsBinding_IServicioRegistroSAPTM</con:interface><con:operation>registrarDespacho</con:operation><con:request name="RegistrarDespacho" id="9b66cc57-a2f8-4139-999b-8738c3a50ca3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.100.120.139/PE/svrADDSPY_TAG/ServicioRegistroSPY.svc/ServicioRegistroSAPTM</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:uniq1="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroSAPTM">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="810edc62-58ed-4b26-88b1-2d0273cb5b13"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="properties" name="Properties - Despacho" id="48e13e72-4d84-4c43-be26-b3619c93d1fa"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>strCodigoUnidadNegocio</con:name><con:value>PE</con:value></con:property><con:property><con:name>strNumeroOrdenCompra</con:name><con:value>10063613013</con:value></con:property><con:property><con:name>strNumeroPallet</con:name><con:value/></con:property><con:property><con:name>strUsuario</con:name><con:value>NANANT1</con:value></con:property><con:property><con:name>strNumeroDespacho</con:name><con:value>400283391</con:value></con:property><con:property><con:name>datFechaInicioTraslado</con:name><con:value>2018-12-01T00:00:00</con:value></con:property><con:property><con:name>strRazonSocialTransportista1</con:name><con:value>DALUJEGA &amp;amp; HIJOS S.R.L</con:value></con:property><con:property><con:name>strDireccionTransportista1</con:name><con:value>av. Los pumas 753 urb. Matellini</con:value></con:property><con:property><con:name>strRucTransportista1</con:name><con:value>20491850494</con:value></con:property><con:property><con:name>strPuntoPartida1</con:name><con:value>Av. Industrial S/N Par. Ind. Las Praderas PE</con:value></con:property><con:property><con:name>strPuntoLlegada1</con:name><con:value>Mz I Lote 10A  Urb. Andromeda - CHORRILLOS PE</con:value></con:property><con:property><con:name>strRazonSocialTransportista2</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista2</con:name><con:value/></con:property><con:property><con:name>strRucTransportista2</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida2</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada2</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista3</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista3</con:name><con:value/></con:property><con:property><con:name>strRucTransportista3</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida3</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada3</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista4</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista4</con:name><con:value/></con:property><con:property><con:name>strRucTransportista4</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida4</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada4</con:name><con:value/></con:property><con:property><con:name>strRazonSocialTransportista5</con:name><con:value/></con:property><con:property><con:name>strDireccionTransportista5</con:name><con:value/></con:property><con:property><con:name>strRucTransportista5</con:name><con:value/></con:property><con:property><con:name>strPuntoPartida5</con:name><con:value/></con:property><con:property><con:name>strPuntoLlegada5</con:name><con:value/></con:property><con:property><con:name>strCrossDock1</con:name><con:value>LIMA CENTRO 2 OESTE </con:value></con:property><con:property><con:name>strCrossDock2</con:name><con:value/></con:property><con:property><con:name>strCrossDock3</con:name><con:value/></con:property><con:property><con:name>strCrossDock4</con:name><con:value/></con:property><con:property><con:name>strCrossDock5</con:name><con:value/></con:property><con:property><con:name>strCodigoZona</con:name><con:value>PE-R-Z703</con:value></con:property><con:property><con:name>strZonaRepartoDescripcion</con:name><con:value>SAN MIGUEL</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarDespacho" id="1f250d0b-3dbb-4420-91ce-738cc8859cc3"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpsBinding_IServicioRegistroSAPTM</con:interface><con:operation>registrarDespacho</con:operation><con:request name="RegistrarDespacho" id="9b66cc57-a2f8-4139-999b-8738c3a50ca3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://uat-web-sfc-per.gp.unique-yanbal.com:444/srvADDSAPTM/ServicioRegistroSAPTM.svc/ServicioRegistroSAPTM</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:uniq1="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroSAPTM">
    <soapenv:Header/>
    <soapenv:Body>
       <tem:registrarDespacho>
@@ -3042,135 +2671,15 @@ propTestStep.setPropertyValue("StopLoop", "F")
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="057491a7-b6e6-4a81-a787-2e64af422a9a"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="properties" name="Properties Picking" id="d6084fea-a989-4d83-8412-baf4f8c694dc"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>detailPicking</con:name><con:value><![CDATA[<uniq1:lstItemsPicking>
   <uniq1:ItemPicking>
     <uniq1:intSecuenciaItem>1</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>25031614</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>40</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>807PE01427</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>17.50</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>2</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>22371680</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>41</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>031BEL1018</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>23.93</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>3</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>20011611</uniq1:strCodigoItem>
+    <uniq1:strCodigoItem>12465720</uniq1:strCodigoItem>
     <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
     <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>809CO00196</uniq1:strNumeroLote>
+    <uniq1:strNumeroLote>0000000000</uniq1:strNumeroLote>
     <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>29.60</uniq1:decPesoProducto>
+    <uniq1:strPuertaDespacho>3</uniq1:strPuertaDespacho>
+    <uniq1:decPesoProducto>14904.00</uniq1:decPesoProducto>
   </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>4</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004654</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PEU0451</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>144.83</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>5</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004655</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PEU0239</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>145.46</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>6</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004651</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PEU1220</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>168.80</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>7</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004652</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PEU0980</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>170.66</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>8</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004670</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PEU0718</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>183.00</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>9</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>10004671</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>1</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>809PEU0195</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>187.60</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>10</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>20012167</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>20</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PE00334</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>211.26</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>11</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>20012168</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>6</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PE00011</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>211.56</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>12</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>20012168</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>5</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PE00914</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>211.56</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-  <uniq1:ItemPicking>
-    <uniq1:intSecuenciaItem>13</uniq1:intSecuenciaItem>
-    <uniq1:strCodigoItem>20012169</uniq1:strCodigoItem>
-    <uniq1:intCantidadPreparada>10</uniq1:intCantidadPreparada>
-    <uniq1:strMarcaProductoFueraCaja>0</uniq1:strMarcaProductoFueraCaja>
-    <uniq1:strNumeroLote>810PE00978</uniq1:strNumeroLote>
-    <uniq1:strNombreResumidoPremioFueraCaja></uniq1:strNombreResumidoPremioFueraCaja>
-    <uniq1:strPuertaDespacho>2</uniq1:strPuertaDespacho>
-    <uniq1:decPesoProducto>211.73</uniq1:decPesoProducto>
-  </uniq1:ItemPicking>
-</uniq1:lstItemsPicking>]]></con:value></con:property><con:property><con:name>strCodigoUnidadNegocio</con:name><con:value>PE</con:value></con:property><con:property><con:name>strNumeroOrdenCompra</con:name><con:value>10063611600</con:value></con:property><con:property><con:name>datFechaEnvio</con:name><con:value>2018-12-02T01:10:03.003</con:value></con:property><con:property><con:name>intNumeroCajasOrden</con:name><con:value>2</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarPicking" id="cca8e745-1818-4457-a665-2198b2aa53ce"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpsBinding_IServicioRegistroSPY</con:interface><con:operation>registrarPicking</con:operation><con:request name="RegistrarPicking" id="33662258-d59e-4a90-9d27-7ee75e51de6c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.100.120.139/PE/svrADDSAPTM_TAG/ServicioRegistroSAPTM.svc/ServicioRegistroSPY</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:uniq1="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroSPY">
+</uniq1:lstItemsPicking>]]></con:value></con:property><con:property><con:name>strCodigoUnidadNegocio</con:name><con:value>PE</con:value></con:property><con:property><con:name>strNumeroOrdenCompra</con:name><con:value>10063613013</con:value></con:property><con:property><con:name>datFechaEnvio</con:name><con:value>2018-12-01T22:50:02.003</con:value></con:property><con:property><con:name>intNumeroCajasOrden</con:name><con:value>1</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="request" name="RegistrarPicking" id="cca8e745-1818-4457-a665-2198b2aa53ce"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>BasicHttpsBinding_IServicioRegistroSPY</con:interface><con:operation>registrarPicking</con:operation><con:request name="RegistrarPicking" id="33662258-d59e-4a90-9d27-7ee75e51de6c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://uat-web-sfc-per.gp.unique-yanbal.com:444/srvADDSPY/ServicioRegistroSPY.svc/ServicioRegistroSPY</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:uniq="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:uniq1="http://schemas.datacontract.org/2004/07/UNIQUE.ADD.DistributedService.Core.Models.EntitiesRegistroSPY">
    <soapenv:Header/>
    <soapenv:Body>
       <tem:registrarPicking>
