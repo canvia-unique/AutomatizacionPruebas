@@ -1,3 +1,7 @@
+
+IF OBJECT_ID('tempdb..#tmpOrd', 'U') IS NOT NULL
+DROP TABLE #tmpOrd
+
 IF OBJECT_ID('tempdb..#TMP_JMETER_TEST01', 'U') IS NOT NULL
 DROP TABLE #TMP_JMETER_TEST01
 
@@ -25,11 +29,65 @@ DROP TABLE ##temp_Despacho
 DECLARE @ITERACION AS VARCHAR(3);
 SET @ITERACION = '100'
 
+create table #tmpOrd
+(
+numero_orden varchar(20)
+)
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'PRE'
+and tipo_persona =1
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'PRE'
+and tipo_persona =2
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5  numero_orden From eadd.orden where TIPO_ORDEN = 'FLD'
+and tipo_persona =1
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'FLD'
+and tipo_persona =2
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'EMP'
+and tipo_persona =1
+
+insert into #tmpOrd
+select top 5  numero_orden From eadd.orden where TIPO_ORDEN = 'EMP'
+and tipo_persona =2
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'SAD'
+and tipo_persona = 1
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'SAD'
+and tipo_persona = 2
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'NOR'
+and tipo_persona = 1
+order by fecha_creacion desc
+
+insert into #tmpOrd
+select top 5 numero_orden From eadd.orden where TIPO_ORDEN = 'NOR'
+and tipo_persona = 2
+order by fecha_creacion desc
+
 SELECT TOP 1000 
 		CORRELATIVO_ORDEN, NUMERO_ORDEN
 	INTO #TMP_JMETER_TEST01
 FROM EADD.ORDEN O WITH(NOLOCK)
-WHERE O.TIPO_ORDEN = 'NOR' ORDER BY NEWID()
+WHERE O.numero_orden in (select numero_orden From #tmpOrd) ORDER BY NEWID()
 
 --
 SELECT '--ORDEN'
@@ -74,7 +132,7 @@ SELECT TOP 1000
 		PORCENTAJE_IMPUESTO decPorcentajeImpuesto,
 		TIPO_PERSONA strTipoPersona,
 		NUMERO_CONTRIBUYENTE strCodigoTributario,
-		RAZON_SOCIAL strRazonSocial,
+		REPLACE(RAZON_SOCIAL,'&','&amp;') strRazonSocial,
 		DIRECCION_RAZON_SOCIAL strDireccionrazonSocial,
 		EMAIL_CONSULTORA strCorreoConsultora,
 		TELEFONO_CONSULTORA strTelefonoConsultora,
@@ -144,8 +202,8 @@ SELECT
 	CODIGO_ORIGEN_INCENTIVO strCodigoOrigen,
 	INICIAL_VENTA_INCENTIVO decMontoInicialincentivo,
 	FINAL_VENTA_INCENTIVO decMontoFinalIncentivo,
-	FECHA_INICIO_PLAN datFechaInicioPlan,
-	FECHA_FIN_PLAN datFechaFinPlan,
+	 CONVERT(VARCHAR(23), FECHA_INICIO_PLAN, 126) datFechaInicioPlan,
+	 CONVERT(VARCHAR(23), FECHA_FIN_PLAN, 126)  datFechaFinPlan,
 	CODIGO_PRODUCTO strCodigoProducto,
 	DESCRIPCION_PRODUCTO strDescripcionProducto,
 	CODIGO_COMERCIAL_PRODUCTO strCodigoComercial,
@@ -173,7 +231,7 @@ SELECT
 	CORRELATIVO_PICKING,
 	UNIDAD_NEGOCIO strCodigoUnidadNegocio,
 	CONCAT(@ITERACION, NUMERO_ORDEN) strNumeroOrdenCompra,
-	FECHA_ENVIO datFechaEnvio,
+	   CONVERT(VARCHAR(23), FECHA_ENVIO, 126) datFechaEnvio,
 	NUMERO_CAJAS intNumeroCajasOrden
 	into ##temp_PickingCabecera
 FROM EADD.PICKING_CABECERA PC WITH(NOLOCK)
@@ -207,28 +265,28 @@ SELECT
 	NUMERO_PALLET strNumeroPallet,
 	USUARIO strUsuario,
 	NUMERO_DESPACHO strNumeroDespacho,
-	FECHA_INICIO_TRASLADO datFechaInicioTraslado,
-	RAZON_SOCIAL_1 strRazonSocialTransportista1,
+	CONVERT(VARCHAR(23), FECHA_INICIO_TRASLADO, 126) datFechaInicioTraslado,
+	REPLACE(RAZON_SOCIAL_1,'&','&amp;') strRazonSocialTransportista1,
 	DIRECCION_1 strDireccionTransportista1,
 	RUC_1 strRucTransportista1,
 	PUNTO_PARTIDA_1 strPuntoPartida1,
 	PUNTO_LLEGADA_1 strPuntoLlegada1,
-	RAZON_SOCIAL_2 strRazonSocialTransportista2,
+	REPLACE(RAZON_SOCIAL_2,'&','&amp;') strRazonSocialTransportista2,
 	DIRECCION_2 strDireccionTransportista2,
 	RUC_2 strRucTransportista2,
 	PUNTO_PARTIDA_2 strPuntoPartida2,
 	PUNTO_LLEGADA_2 strPuntoLlegada2,
-	RAZON_SOCIAL_3 strRazonSocialTransportista3,
+	REPLACE(RAZON_SOCIAL_3,'&','&amp;') strRazonSocialTransportista3,
 	DIRECCION_3 strDireccionTransportista3,
 	RUC_3 strRucTransportista3,
 	PUNTO_PARTIDA_3 strPuntoPartida3,
 	PUNTO_LLEGADA_3 strPuntoLlegada3,
-	RAZON_SOCIAL_4 strRazonSocialTransportista4,
+	REPLACE(RAZON_SOCIAL_4,'&','&amp;') strRazonSocialTransportista4,
 	DIRECCION_4 strDireccionTransportista4,
 	RUC_4 strRucTransportista4,
 	PUNTO_PARTIDA_4 strPuntoPartida4,
 	PUNTO_LLEGADA_4 strPuntoLlegada4,
-	RAZON_SOCIAL_5 strRazonSocialTransportista5,
+	REPLACE(RAZON_SOCIAL_5,'&','&amp;') strRazonSocialTransportista5,
 	DIRECCION_5 strDireccionTransportista5,
 	RUC_5 strRucTransportista5,
 	PUNTO_PARTIDA_5 strPuntoPartida5,
