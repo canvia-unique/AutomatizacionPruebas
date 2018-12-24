@@ -13,6 +13,7 @@ El generador de casos de prueba es un proyecto SOAPUI que consume la informació
   - De ser necesario cambiar la cadena de conexión.
   - Finalmente ejecutar el Script Query.sql para generar la información
   - y Woola solo tienes que ejecutar el Test_SuiteADD.
+  - Para hacer seguimiento a tu procesamiento puedes usar el Monitor.sql.
 
 ### Configuración
 
