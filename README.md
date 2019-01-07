@@ -14,6 +14,7 @@ El generador de casos de prueba es un proyecto SOAPUI que consume la informació
   - Finalmente ejecutar el Script Query.sql para generar la información
   - y Woola solo tienes que ejecutar el Test_SuiteADD.
   - Para hacer seguimiento a tu procesamiento puedes usar el Monitor.sql.
+  - Ruta JDBC C:\Program Files (x86)\SmartBear\SoapUI-5.4.0\bin\ext
 
 ### Configuración
 
