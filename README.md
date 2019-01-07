@@ -7,14 +7,11 @@
 El generador de casos de prueba es un proyecto SOAPUI que consume la información directamente de la base de datos y tienes soporte masivo para la generación de causisticas. 
  Para ejecutar el proyecto debes seguir los siguientes pasos
 
+  - Previamente registrar la lib sqljdbc42.jar en C:\Program Files (x86)\SmartBear\SoapUI-5.4.0\bin\ext
   - Abrir el proyecto ADD_TEST-soapui-project.xml en SOAPUI 5.4.0
-  - Desplegar Test_SuiteADD/RegistrarOrdenes/Test Steps dentro del proyecto
-  - Abrir el script groovy data driver.
-  - De ser necesario cambiar la cadena de conexión.
-  - Finalmente ejecutar el Script Query.sql para generar la información
-  - y Woola solo tienes que ejecutar el Test_SuiteADD.
-  - Para hacer seguimiento a tu procesamiento puedes usar el Monitor.sql.
-  - Ruta JDBC C:\Program Files (x86)\SmartBear\SoapUI-5.4.0\bin\ext
+  - Ejecutar el script Generacion_Devolucion.sql para la generación de los casos de prueba.
+  - Ejecutar los casos de prueba en el SOAPUI
+  - Para hacer seguimiento a tu procesamiento puedes usar el script Seguimiento.sql
 
 ### Configuración
 
