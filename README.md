@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-El generador de casos de prueba es un proyecto SOAPUI que consume la información directamente de la base de datos y tienes soporte masivo para la generación de causisticas. 
+El generador de casos de prueba es un proyecto SOAPUI que consume la información directamente de la base de datos y tiene soporte masivo para la generación de causisticas. 
  Para ejecutar el proyecto debes seguir los siguientes pasos
 
   - Previamente registrar la lib sqljdbc42.jar en C:\Program Files (x86)\SmartBear\SoapUI-5.4.0\bin\ext
